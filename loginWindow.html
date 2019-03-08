@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Point Of Sale</title>
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Login</a>
+</nav>
+
+<!--<nav>-->
+<!--<div class="nav-wrapper">-->
+<!--<a class="brand-logo center">Login</a>-->
+<!--</div>-->
+<!--</nav>-->
+<div class="container" style="margin-top: 25px">
+    <form>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="emailLabel">User &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  </span>
+            </div>
+            <input type="text" id="email" class="form-control"   aria-label="Username"
+                   aria-describedby="basic-addon1" autofocus required>
+        </div>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="passLabel">Password</span>
+            </div>
+            <input type="password" id="pass" class="form-control" aria-label="Username"
+                   aria-describedby="basic-addon1" required>
+        </div>
+
+        <div style="text-align: right">
+            <button type="submit" id="loginbtn" class="btn btn-primary">Login</button>
+        </div>
+
+
+        <!--<div class="row">-->
+        <!--<div class="input-field col s12">-->
+        <!--<input id="email" type="text" value="ahmad@gmail.com" class="validate">-->
+        <!--<label for="email">Email</label>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row">-->
+        <!--<div class="input-field col s12">-->
+        <!--<input id="pass" type="password" value="123456" class="validate">-->
+        <!--<label for="pass">Password</label>-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="row" style="text-align: center;">-->
+        <!--<button type="submit" class="waves-effect waves-light btn" style="width: 80%;" >Login</button>-->
+        <!--</div>-->
+    </form>
+
+</div>
+
+
+<script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    document.querySelector('form').addEventListener('submit', loginForm);
+
+    function loginForm(e) {
+        e.preventDefault();
+        const email = document.querySelector('#email').value;
+        const pass = document.querySelector('#pass').value;
+        if (email !== "" || pass !== "") {
+            const jo = {
+                email,
+                pass
+            }
+            console.log(jo);
+            ipcRenderer.send('login:auth', jo);
+        } else {
+          //  ipcRenderer.send('main:warning', 'Some field is missing');
+            alert('User and Password is wrong');
+            //console.log('some field is empty');
+        }
+
+    }
+
+    ipcRenderer.on('loginSms', function (e,data) {
+        if (data){
+            window.alert(data);
+        }
+    })
+
+
+</script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"/>
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"/>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"/>-->
+</body>
+
+</html>

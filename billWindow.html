@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bill</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <form>
+        <div class="row">
+            <div class="form-group">
+                <label for="salecb">Select One:</label>
+                <select onchange="changeSale()" class="form-control" id="salecb" autofocus>
+                    <option>Local Sale</option>
+                    <option>Sale</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-row">
+                <div class="col">
+                    from
+                    <input type="date" id="fromDate" class="form-control" placeholder="from">
+                </div>
+                <div class="col">
+                    to
+                    <input type="date" id="toDate" class="form-control" placeholder="to">
+                </div>
+                <div class="col">
+                    <button style="margin-top: 30%" id="searchbtn" type="submit" class="btn btn-info">Search
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="row" style="margin-top: 3%">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Bill id</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Paid</th>
+                <th scope="col">Pending</th>
+                <th scope="col">Date</th>
+                <th scope="col">Coment</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="row">
+        <div style="text-align: justify">
+            <button style="float: right" type="button" id="billbtn" class="btn btn-primary">Generate Bill</button>
+        </div>
+    </div>
+
+</div>
+
+
+<script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    salecb = document.querySelector('#salecb');
+    fromDate = document.querySelector('#fromDate');
+    toDate = document.querySelector('#toDate');
+    tbody = document.querySelector('tbody');
+
+    searchBtn = document.querySelector('#searchbtn');
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    preDay = parseInt(dd - 1);
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    if (preDay < 10) {
+        preDay = '0' + preDay
+    }
+
+    previousDay = yyyy + '-' + mm + '-' + preDay;
+    today = yyyy + '-' + mm + '-' + dd;
+    fromDate.value = previousDay;
+    toDate.value = today;
+
+    function changeSale(e) {
+        console.log('change event listener');
+        // e.preventDefault();
+        if (salecb.value === 'Local Sale'){
+            document.getElementById('billbtn').style.visibility = 'visible';
+        }
+        if (salecb.value === 'Sale'){
+            document.getElementById('billbtn').style.visibility = 'hidden';
+        }
+    }
+
+
+    document.querySelector('form').addEventListener('submit', formSubmitted);
+
+    function formSubmitted(e) {
+        e.preventDefault();
+        console.log('form submitted', salecb.value, fromDate.value, toDate.value);
+
+        ipcRenderer.send('bill:searchBill', {
+            Sale: salecb.value,
+            fromDate: fromDate.value,
+            toDate: toDate.value
+        });
+    }
+
+
+    ipcRenderer.on('bill:sendBillsData', function (e, data) {
+        console.log(data);
+        if (data === 'NO') {
+            tbody.innerHTML = '';
+        } else {
+            tbody.innerHTML = '';
+            for (item in data) {
+                console.log(data[item]);
+
+                row = `<th scope='row'>${parseInt(item, 10) + 1}</th><td>${data[item]['billid']}</td><td>${data[item]['amount']}</td><td>${data[item]['paid']}</td><td>${data[item]['pending']}</td><td>${data[item]['date']}</td><td>${data[item]['comment']}</td><td><button onclick='getSaleDeatil(${data[item]['billid']})' id=${data[item]['billid']} class="detail btn btn-link" data-toggle="modal" data-target="#exampleModal">Details</button></td>`;
+                tr = document.createElement('tr');
+                tr.innerHTML = row
+                tbody.appendChild(tr);
+            }
+        }
+
+
+    });
+
+    function getSaleDeatil(d) {
+        console.log(d);
+        ipcRenderer.send('main:getBillDetail', d);
+
+    }
+
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"/>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"/>
+</body>
+</html>

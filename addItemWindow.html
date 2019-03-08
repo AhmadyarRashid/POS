@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Point Of Sale</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" id="windowLogo" href="#">Add Item</a>
+</nav>
+
+<div class="container">
+    <form style="margin-top: 25px">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">Date</span>
+                    </div>
+                    <input type="date" id="date" class="form-control" aria-label="Username"
+                           aria-describedby="basic-addon1" required>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon2">Code</span>
+                    </div>
+                    <input type="text" id="codeP" style="text-transform:uppercase" maxlength="50" class="form-control"
+                           aria-label="Username" autofocus
+                           aria-describedby="basic-addon1">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon31">Model</span>
+                    </div>
+                    <input type="text" id="model" style="text-transform:uppercase" maxlength="50" class="form-control"
+                           aria-label="Username" required
+                           aria-describedby="basic-addon1">
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Description</span>
+                    </div>
+                    <input type="text" id="description" style="text-transform:uppercase" maxlength="50"
+                           class="form-control" aria-label="Username"
+                           aria-describedby="basic-addon3" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon4">Quantity</span>
+                    </div>
+                    <input type="number" min="0" id="itemNo" class="form-control"
+                           aria-label="Username"
+                           aria-describedby="basic-addon4">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon5">Unit Price</span>
+                    </div>
+                    <input type="number" min="0" id="unitPrice" class="form-control"
+                           aria-label="Username"
+                           aria-describedby="basic-addon4">
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon6">Amount</span>
+                    </div>
+                    <input type="text" id="amount" class="form-control" aria-label="Username" disabled
+                           aria-describedby="basic-addon4">
+                </div>
+            </div>
+        </div>
+
+
+        <div style="text-align: right">
+            <button type="button" id="SaveNextbtn" class="btn btn-primary">Save Next</button>
+            <button type="submit" id="Savebtn" class="btn btn-primary">Save</button>
+            <button type="button" id="cancelbtn" class="btn btn-primary">Cancel</button>
+        </div>
+    </form>
+</div>
+<!--<div class="row">-->
+<!--<form class="col s12">-->
+<!--<div class="row">-->
+
+<!--<div class="input-field col s6">-->
+<!--<input id="date" type="date" value="2019-09-29" class="validate"/>-->
+<!--</div>-->
+<!--<div class="input-field col s6">-->
+<!--<input id="serial" type="text" style="text-transform:uppercase" maxlength="50" class="validate"-->
+<!--autofocus>-->
+<!--<label for="serial">Serial Number</label>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="input-field col s12">-->
+<!--<input id="description" style="text-transform:uppercase" type="text" maxlength="50" class="validate">-->
+<!--<label for="description">Description</label>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="row">-->
+<!--<div class="input-field col s4">-->
+<!--<input id="itemNo" type="number" class="validate">-->
+<!--<label for="itemNo">Quantity</label>-->
+<!--</div>-->
+<!--<div class="input-field col s4">-->
+<!--<input id="unitPrice" type="number" class="validate">-->
+<!--<label for="unitPrice">Unit Price</label>-->
+<!--</div>-->
+<!--<div class="input-field col s4">-->
+<!--<input id="amount" type="number" placeholder="Amount" class="validate" disabled>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div class="row" style="text-align: end;">-->
+<!--<div class="col s12">-->
+<!--<button type="submit" class="waves-effect waves-light btn" style="width: 20%;" id="loginbtn">Add-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+<!--</form>-->
+<!--</div>-->
+
+<script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    itemId = 0;
+    id = document.querySelector('#id');
+    date = document.querySelector('#date');
+    codeP = document.querySelector('#codeP');
+    des = document.querySelector('#description');
+    items = document.querySelector('#itemNo');
+    unitPrice = document.querySelector('#unitPrice');
+    amount = document.querySelector('#amount');
+    model = document.querySelector('#model');
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+    date.value = today;
+
+    document.querySelector('form').addEventListener('submit', addItemSubmit);
+
+    document.querySelector('#unitPrice').addEventListener('keyup', function (e) {
+        console.log('keyup press');
+        amount.value = items.value * unitPrice.value;
+    });
+
+    document.querySelector('#itemNo').addEventListener('keyup', function (e) {
+        console.log('keyup press');
+        amount.value = items.value * unitPrice.value;
+    });
+
+
+    function addItemSubmit(e) {
+        e.preventDefault();
+        if (document.getElementById('windowLogo').innerHTML == 'Edit Item') {
+            const jo = {
+                id: 1,
+                date: date.value,
+                codeP: codeP.value.toUpperCase(),
+                des: des.value.toUpperCase(),
+                items: items.value,
+                unitPrice: unitPrice.value,
+                amount: amount.value,
+                model: model.value.toUpperCase()
+            }
+            ipcRenderer.send('Edit:addInventoryItem', jo);
+        } else {
+            const jo = {
+                id: 1,
+                date: date.value,
+                codeP: codeP.value.toUpperCase(),
+                des: des.value.toUpperCase(),
+                items: items.value,
+                unitPrice: unitPrice.value,
+                amount: amount.value,
+                model: model.value.toUpperCase()
+            }
+            ipcRenderer.send('addInventoryItem', jo);
+        }
+        console.log('add item sucessfully');
+    }
+
+    document.querySelector('#SaveNextbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        if (model.value.trim() == '') {
+            window.alert('Model field must required.');
+            model.focus();
+        } else {
+            const jo = {
+                id: 1,
+                date: date.value,
+                codeP: codeP.value.toUpperCase(),
+                des: des.value.toUpperCase(),
+                items: items.value,
+                unitPrice: unitPrice.value,
+                amount: amount.value,
+                model: model.value.toUpperCase()
+            }
+            ipcRenderer.send('SaveNextaddInventoryItem', jo);
+            console.log('add item sucessfully');
+        }
+
+    });
+
+    ipcRenderer.on('AddItemNextRes', function (e, data) {
+        window.alert('Item Insert Sucessfully');
+        codeP.value = '';
+        des.value = '';
+        items.value = 0;
+        unitPrice.value = 0;
+        amount.value = 0;
+        model.value = '';
+        codeP.focus();
+    })
+
+    ipcRenderer.on('AddItemSms', function (e, data) {
+        if (data) {
+            window.alert(data);
+        }
+    })
+
+
+    ipcRenderer.on('addWindow:editData', function (e, item) {
+        console.log(item);
+        document.querySelector('#windowLogo').innerHTML = 'Edit Item';
+        date.value = item['date'];
+        //serialNo.value = item['serial_no'];
+        codeP.value = item['CodeP'];
+        des.value = item['description'];
+        model.value = item['Model'];
+        model.disabled = true;
+        items.value = item['items'];
+        unitPrice.value = item['unit_price'];
+        amount.value = item['items'] * item['unit_price'];
+        document.querySelector('#SaveNextbtn').style.display = 'none';
+
+    });
+
+    document.querySelector('#cancelbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        ipcRenderer.send('cancelAddItemWindow', '');
+    });
+
+    ipcRenderer.on('sendNotify', function (e, data) {
+        if (data) {
+            window.alert(data);
+        }
+    })
+</script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"/>
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/>
+</body>
+
+</html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" />
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Point Of Sale</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" media="print" />
+    <style type="text/css">
+        tr {
+            line-height: 1px;
+        }
+
+        .tdTable {
+            color: #000000;
+            border: 2px solid #000000
+        }
+    </style>
+</head>
+
+<body>
+    <center>
+        <span id="header" align="middle">
+            <h3 id="companyName"></h3>
+            <p id="CompanyLogo"></p>
+        </span>
+    </center>
+
+    <div id="billDetail">
+        <div class="container">
+
+            <div class="row">
+                <div class="col">
+                    <span id="cusInfod"></span><br />
+                    <span id="cusNo"></span>
+                </div>
+                <div class="col">
+                    <div style="text-align: right">
+                        <span id="date">2019-01-12</span><br />
+                        <span id="billId"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <table border="1" class="table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center;  border: 2px solid #000000 " scope="col">Qty</th>
+                            <th style="text-align: center;  border: 2px solid #000000 " scope="col">Description</th>
+                            <th style="text-align: center;  border: 2px solid #000000 " scope="col">Price</th>
+                            <th style="text-align: center;  border: 2px solid #000000 " scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="3" align="right" class="tdTable">Total Amount</td>
+                            <td id="amount" align='right' class="tdTable">0</td>
+                        </tr>
+
+                        <tr id="disRow">
+                            <td colspan="3" align="right" class="tdTable">Discount Amount</td>
+                            <td id="dis" align='right' class="tdTable">0</td>
+                        </tr>
+
+                        <tr>
+                            <td colspan="3" align="right" class="tdTable">Paid Amount</td>
+                            <td id="paid" align='right' class="tdTable">0</td>
+                        </tr>
+
+                        <tr id="balanceRow" style="display: none">
+                            <td colspan="3" align="right" class="tdTable">Balance Amount</td>
+                            <td id="balance" align='right' class="tdTable">0</td>
+                        </tr>
+
+
+                        <tr>
+                            <td colspan="4" id="companyInfo" align="center" class="tdTable">address
+                            </td>
+                        </tr>
+
+                        <tr onclick="printBill()" autofocus title="Click to print">
+                            <td colspan="4" id="companyTag" align="center" class="tdTable"
+                                style="  border: 2px solid #000000 ">Goods
+                                once sold cannot be return
+                                back-
+                                Thanks
+
+                            </td>
+
+                        </tr>
+
+                    </tfoot>
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const electron = require('electron');
+        const { ipcRenderer } = electron;
+
+        const billDetail = document.querySelector('#billDetail');
+        tbody = document.querySelector('tbody');
+
+        ipcRenderer.on('billDetail:sendBillDetails', function (e, data) {
+            console.log(data[0]);
+
+            tbody.innerHTML = '';
+
+            for (item in data) {
+                console.log(item);
+                i = data[item];
+
+                if (i['SerialNo'] == '') {
+                    row = `<td align='center' class="tdTable">${i['quantity']}</td>
+                    <td class="tdTable">${i['description']}&nbsp;${i['Model']}</td>
+                    <td class="tdTable" align='right'>${i['unit_price']}</td>
+                    <td class="tdTable" align='right'>${i['unit_price'] * i['quantity']}</td>`;
+                } else {
+                    row = `<td align='center' class="tdTable" >${i['quantity']}</td>
+                    <td class="tdTable">${i['description']}&nbsp;${i['Model']}&nbsp;&nbsp;(${i['SerialNo']})</td>
+                    <td class="tdTable" align='right'>${i['unit_price']}</td>
+                    <td class="tdTable" align='right'>${i['unit_price'] * i['quantity']}</td>`;
+                }
+
+                console.log(row);
+                tr = document.createElement('tr');
+                tr.innerHTML = row;
+                tbody.appendChild(tr);
+            }
+            document.getElementById('amount').innerHTML = data[0]['amount'];
+            document.getElementById('paid').innerHTML = data[0]['paid'];
+            // formate = new Date(data[0]['date']);
+            // formate.toString("DDDD MMMM YYYY");
+            document.getElementById('date').innerHTML = 'Date: ' + data[0]['date'];
+            //console.log('this is fucking thing ', data[0]['saleType'], data[0]['billid']);
+            document.querySelector('#cusInfod').innerHTML = 'Customer: ' + data[0]['saleType'];
+            document.querySelector('#billId').innerHTML = 'Bill No: ' + data[0]['billid'];
+            console.log(data[0]);
+
+
+            if (data[0]['customerId'] > 0) {
+                if (data[0]['pending'] > 0) {
+                    // document.getElementById('balanceRow').style.display = 'inline';
+                    document.getElementById('balance').innerHTML = data[0]['pending'];
+                }
+            }
+
+            if (data[0]['discount'] > 0) {
+                //   document.getElementById('disRow').style.display = 'inline';
+                document.getElementById('dis').innerHTML = data[0]['discount'];
+            }
+
+
+            if (data[0]['saleType'] == 'Cash Sale' || data[0]['saleType'] == 'Local Sale') {
+                // document.getElementById('disRow').style.display = 'none';
+                document.getElementById('balanceRow').style.display = 'none';
+                //document.getElementById('dis').innerHTML = data[0]['discount'];
+            } else {
+
+            }
+
+        });
+
+        ipcRenderer.on('billDetail:cusInfo', function (e, data) {
+            // console.log(data);
+            try {
+                document.querySelector('#cusInfod').innerHTML = 'Customer: ' + data[0]['name'];
+                document.querySelector('#cusNo').innerHTML = 'Phone No: ' + data[0]['phone'];
+            } catch (e) {
+                console.log(e);
+            }
+
+        });
+
+        ipcRenderer.on('billDetail:sendCompanyInfo', function (e, data) {
+            console.log(data);
+            document.getElementById('companyInfo').innerHTML = `${data[0]['address']} &nbsp;&nbsp;&nbsp; ${data[0]['phone']}`;
+            document.getElementById('companyName').innerHTML = data[0]['name'];
+            document.getElementById('companyTag').innerHTML = data[0]['note'];
+            document.getElementById('CompanyLogo').innerHTML = data[0]['logo'];
+        });
+
+
+        function printBill(e) {
+            // e,preventDefault();
+            console.log('print btn click');
+            window.print();
+
+        }
+
+    </script>
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" />
+    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/>
+</body>
+</html>

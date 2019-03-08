@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <title>Point Of Sale</title>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" id="windowLogo" href="#">Add New Customer</a>
+</nav>
+
+<div class="container">
+    <div class="row">
+
+        <form id="cusForm" style="width: 100%" onsubmit="addCus();return false">
+            <div class="form-group">
+                <label for="cusName">Customer Name</label>
+                <input type="text" class="form-control" required id="cusName" style="text-transform:uppercase"
+                       maxlength="50" aria-describedby="emailHelp" autofocus
+                       placeholder="Enter Customer Name">
+            </div>
+            <div class="form-group">
+                <label for="cusPhone">Customer Phone No</label>
+                <input type="number" required class="form-control" id="cusPhone" minlength="10"
+                       placeholder="Enter Customer Phone No">
+            </div>
+
+            <div class="form-group">
+                <label for="cusEmail">Customer Email</label>
+                <input type="email" class="form-control" id="cusEmail" placeholder="Enter Customer Email">
+            </div>
+
+            <div class="form-group">
+                <label for="cusAddress">Customer Address</label>
+                <textarea type="text" class="form-control" style="text-transform:uppercase" maxlength="50"
+                          id="cusAddress"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+
+    </div>
+</div>
+<script>
+
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+
+    function addCus() {
+        Cname = document.getElementById('cusName').value;
+        phone = document.getElementById('cusPhone').value;
+        email = document.getElementById('cusEmail').value;
+        address = document.getElementById('cusAddress').value;
+        if (Cname !== "" || phone !== "") {
+            ipcRenderer.send('addcustomerData', {'name': Cname.toUpperCase(), "phone": phone, "email": email, 'address': address});
+        } else {
+            window.alert('Customer Name and Phone No is required');
+        }
+    }
+
+    ipcRenderer.on('addCusError' , function (e,data) {
+        window.alert(data);
+    })
+
+</script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"/>
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/>
+</body>
+
+</html>
