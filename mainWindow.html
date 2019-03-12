@@ -537,7 +537,6 @@
                 var selItem = document.getElementById('selectItemDesSO').value;
                 ipcRenderer.send('main:getItemDetail', selItem);
             }
-
         });
 
         ipcRenderer.on('Sale:sendItems', function (e, data) {
@@ -667,10 +666,7 @@
                 }
                 document.getElementById('totalAmount').value = Amount + Number(bal);
                 document.getElementById(`paid`).value = (Amount + Number(bal)) - Number(dis);
-
             }
-
-
         }
 
         ipcRenderer.on('sendAllCusName', function (e, data) {
@@ -990,9 +986,9 @@
                           <td>${i['Code']}</td>
                           <td>${i['Stock']}</td>
                           <td><input type="text" value="${i['SerialNo']}" disabled></td>
-                          <td><input type="number" value="${i['unit_price']}" disabled></td>
+                          <td><input type="number" value="${i['price']}" disabled></td>
                           <td><input type="number" value="${i['quantity']}" disabled></td>
-                          <td>${i['unit_price'] * i['quantity']}</td>
+                          <td>${i['price'] * i['quantity']}</td>
                           <td>
                           <button onclick="delItemBE(${i['itemId']})" class="btn btn-danger" disabled>X</button>
                           </td>`;

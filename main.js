@@ -6,7 +6,7 @@ const mysqlDump = require('mysqldump');
 var printer = require('node-thermal-printer');
 var fs = require('fs');
 // SET ENV
-process.env.NODE_ENV = 'development';
+process.env.NODE_ENV = 'production';
 let cid;
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
@@ -158,8 +158,8 @@ function GeneratePrintedBill(data) {
     data = parseInt(data);
     // data = 174;
     if (data) {
-        $getBillDetails = `SELECT DISTINCT s.SerialNo,s.Model, s.quantity,s.saleType as saleType ,d.billid, s.id as itemId ,s.description,s.unit_price,d.amount,d.paid,d.pending, d.dis as discount,d.date ,d.cid as customerId from 
-                     (SELECT  i.id,i.Model,i.description,i.unit_price,s.quantity , s.saleType,s.SerialNo from sales as s INNER JOIN items as i WHERE i.id = s.itemid AND s.saleid in (SELECT bd.sid from bill as b INNER JOIN billdes as bd WHERE b.billid = bd.bid and b.billid = ${data} )) as s INNER JOIN
+        $getBillDetails = `SELECT DISTINCT s.SerialNo,s.Model, s.quantity,s.saleType as saleType ,d.billid, s.id as itemId ,s.description,s.unit_price, s.price,d.amount,d.paid,d.pending, d.dis as discount,d.date ,d.cid as customerId from 
+                     (SELECT  i.id,i.Model,i.description,i.unit_price,s.quantity , s.saleType,s.SerialNo, s.price from sales as s INNER JOIN items as i WHERE i.id = s.itemid AND s.saleid in (SELECT bd.sid from bill as b INNER JOIN billdes as bd WHERE b.billid = bd.bid and b.billid = ${data} )) as s INNER JOIN
                      (SELECT b.cid,b.dis,b.billid, b.date,b.amount,b.paid,bd.sid,b.pending from bill as b INNER JOIN billdes as bd WHERE b.billid = bd.bid and b.billid = ${data}) as d;`;
         connection.query($getBillDetails, function (err, rows, fields) {
             if (err) {
@@ -786,7 +786,7 @@ ipcMain.on('SaveBill', function (e, data) {
         for (var index in data.Detail) {
             // console.log(data.Detail[index]);
             obj = data.Detail[index];
-            $saleQuery = `INSERT INTO sales (itemid,date,quantity,saleType,SerialNo) VALUES (${parseInt(obj.Id)},'${obj.Date}',${obj.Qty},'${data.SaleType}','${obj.SerialNo}')`;
+            $saleQuery = `INSERT INTO sales (itemid,date,price,quantity,saleType,SerialNo) VALUES (${parseInt(obj.Id)},'${obj.Date}',${parseInt(obj.Price)},${obj.Qty},'${data.SaleType}','${obj.SerialNo}')`;
             connection.query($saleQuery, function (e, rows, field) {
                 if (e) {
                     console.log(e);
@@ -852,13 +852,12 @@ ipcMain.on('SaveAndPrintbill', function (e, data) {
         for (var index in data.Detail) {
             // console.log(data.Detail[index]);
             obj = data.Detail[index];
-            $saleQuery = `INSERT INTO sales (itemid,date,quantity,saleType,SerialNo) VALUES (${parseInt(obj.Id)},'${obj.Date}',${obj.Qty},'${data.SaleType}','${obj.SerialNo}')`;
+            $saleQuery = `INSERT INTO sales (itemid,date,price,quantity,saleType,SerialNo) VALUES (${parseInt(obj.Id)},'${obj.Date}',${parseInt(obj.Price)},${obj.Qty},'${data.SaleType}','${obj.SerialNo}')`;
             connection.query($saleQuery, function (e, rows, field) {
                 if (e) {
                     console.log(e);
                     return;
                 }
-
 
                 //========== insert in Bill des ==================
                 $insertBillDes = `INSERT INTO billdes (bid,sid) VALUES (${Brows.insertId},${rows.insertId})`;
@@ -867,10 +866,7 @@ ipcMain.on('SaveAndPrintbill', function (e, data) {
                         console.log(e);
                         return;
                     }
-
                 });
-
-
             });
 
             //========== update Item in items Table============
@@ -994,8 +990,8 @@ ipcMain.on('main:getAllBillId', function (e, data) {
 
 ipcMain.on('main:getAllBillDetail', function (e, data) {
     if (data) {
-        $billDetail = `SELECT DISTINCT s.SerialNo,s.Model,s.items as Stock,s.CodeP as Code , s.quantity, s.id as itemId ,s.description,s.unit_price,d.amount,d.paid,d.pending, d.dis as discount from 
-                     (SELECT  i.id,i.Model,i.CodeP,i.description,i.items,i.unit_price,s.quantity , s.saleType,s.SerialNo from sales as s INNER JOIN items as i WHERE i.id = s.itemid AND s.saleid in (SELECT bd.sid from bill as b INNER JOIN billdes as bd WHERE b.billid = bd.bid and b.billid = ${data} )) as s INNER JOIN
+        $billDetail = `SELECT DISTINCT s.SerialNo,s.Model,s.items as Stock,s.CodeP as Code , s.quantity,s.price, s.id as itemId ,s.description,s.unit_price,d.amount,d.paid,d.pending, d.dis as discount from 
+                     (SELECT  i.id,i.Model,i.CodeP,i.description,i.items,i.unit_price,s.quantity , s.saleType,s.SerialNo,s.price from sales as s INNER JOIN items as i WHERE i.id = s.itemid AND s.saleid in (SELECT bd.sid from bill as b INNER JOIN billdes as bd WHERE b.billid = bd.bid and b.billid = ${data} )) as s INNER JOIN
                      (SELECT b.dis, b.date,b.amount,b.paid,bd.sid,b.pending from bill as b INNER JOIN billdes as bd WHERE b.billid = bd.bid and b.billid = ${data}) as d`;
         connection.query($billDetail, function (e, r, f) {
             if (e) {

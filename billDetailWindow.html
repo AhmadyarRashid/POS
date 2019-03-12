@@ -120,13 +120,13 @@
                 if (i['SerialNo'] == '') {
                     row = `<td align='center' class="tdTable">${i['quantity']}</td>
                     <td class="tdTable">${i['description']}&nbsp;${i['Model']}</td>
-                    <td class="tdTable" align='right'>${i['unit_price']}</td>
-                    <td class="tdTable" align='right'>${i['unit_price'] * i['quantity']}</td>`;
+                    <td class="tdTable" align='right'>${i['price']}</td>
+                    <td class="tdTable" align='right'>${i['price'] * i['quantity']}</td>`;
                 } else {
                     row = `<td align='center' class="tdTable" >${i['quantity']}</td>
                     <td class="tdTable">${i['description']}&nbsp;${i['Model']}&nbsp;&nbsp;(${i['SerialNo']})</td>
-                    <td class="tdTable" align='right'>${i['unit_price']}</td>
-                    <td class="tdTable" align='right'>${i['unit_price'] * i['quantity']}</td>`;
+                    <td class="tdTable" align='right'>${i['price']}</td>
+                    <td class="tdTable" align='right'>${i['price'] * i['quantity']}</td>`;
                 }
 
                 console.log(row);
