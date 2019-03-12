@@ -565,7 +565,8 @@
                         find = true;
                     }
                 }
-                if (!find) {
+                if (!find && i['items'] > 0) {
+                    
                     row = `<td style="display: none;">${i['id']}</td>
                             <td>${i['Model']}</td>
                             <td>${i['description']}</td>
@@ -573,8 +574,8 @@
                             <td>${i['items']}</td>
                             <td><input id="SN+${i['id']}" type="text"  style="text-transform:uppercase"></td>
                             <td><input id="BU+${i['id']}" type="number" value="${i['unit_price']}" min="0" onkeyup="priceQty(this,${i['items']}, ${i['id']})"  required></td>
-                            <td><input id="SI+${i['id']}" type="number" value="0" min="0" onkeyup="checkItemQty(this,${i['items']} , ${i['id']})"  required></td>
-                            <td id="calAmount+${i['id']}">0</td>
+                            <td><input id="SI+${i['id']}" type="number" value="1" min="1" onkeyup="checkItemQty(this,${i['items']} , ${i['id']})"  required></td>
+                            <td id="calAmount+${i['id']}">${i['unit_price']}</td>
                             <td>
                                 <button onclick="delRow(${i['id']})" class="btn btn-danger">x</button>
                             </td>`;
@@ -736,7 +737,7 @@
             // // // // // // console.log('check Items Qty' , ref.value , available);
             up = document.getElementById(`BU+${itemId}`).value;
             if (ref.value > available) {
-                ref.value = 0;
+                ref.value = 1;
                 window.alert(`Your available stock is ${available}`);
             }
 
@@ -751,7 +752,7 @@
             document.getElementById(`paid`).value = Amount + Number(bal);
 
             if (ref.value == '') {
-                document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(0);
+                document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(1);
             } else {
                 document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(ref.value);
             }
