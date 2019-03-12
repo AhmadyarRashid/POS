@@ -6,7 +6,7 @@ const mysqlDump = require('mysqldump');
 var printer = require('node-thermal-printer');
 var fs = require('fs');
 // SET ENV
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = 'development';
 let cid;
 
 const { app, BrowserWindow, Menu, ipcMain } = electron;
@@ -926,7 +926,7 @@ ipcMain.on('getCustomerBalance', function (e, data) {
 });
 
 ipcMain.on('getItemsFromDb', function (e, data) {
-    $GetItemsquery = `SELECT id, description, Model FROM items`;
+    $GetItemsquery = `SELECT id, description, Model,items FROM items`;
     connection.query($GetItemsquery, function (e, rows, field) {
         if (e) {
             console.log(e);

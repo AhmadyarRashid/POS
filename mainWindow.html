@@ -542,13 +542,16 @@
 
         ipcRenderer.on('Sale:sendItems', function (e, data) {
             if (data) {
-                // // // // // // console.log(data);
+                console.log(data);
                 document.getElementById("selectItemDesSO").innerHTML = '';
                 for (item in data) {
                     var option = document.createElement("option");
                     option.text = data[item]['Model'] + '  ----------------  ' + data[item]['description'];
                     option.value = data[item]['id'];
                     var select = document.getElementById("selectItemDesSO");
+                    if(data[item]['items'] <= 0){
+                        option.style.backgroundColor = '#FCD7D7';
+                    }
                     select.appendChild(option);
                 }
             }
