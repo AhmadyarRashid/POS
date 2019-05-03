@@ -8,368 +8,379 @@
 
 <body>
 
-    <!------------------------------------------------------------------------------------------>
-    <!----------------------------Nav Bar Header------------------------------------------------>
-    <!------------------------------------------------------------------------------------------>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" id="brand" href="#">Point Of Sale</a>
+<!------------------------------------------------------------------------------------------>
+<!----------------------------Nav Bar Header------------------------------------------------>
+<!------------------------------------------------------------------------------------------>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" id="brand" href="#">Point Of Sale</a>
 
-        <div class=" navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a id="addbtn" class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a id="salebtn" class="nav-link" href="#">Sale</i></a>
-                </li>
-                <li class="nav-item">
-                    <a id="billbtn" class="nav-link" href="#">Bill</i></a>
-                </li>
-                <li class="nav-item">
-                    <a id="reportbtn" class="nav-link" href="#">Report</i></a>
-                </li>
+    <div class=" navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a id="addbtn" class="nav-link" href="#">Home<span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a id="salebtn" class="nav-link" href="#">Sale</i></a>
+            </li>
+            <li class="nav-item">
+                <a id="billbtn" class="nav-link" href="#">Bill</i></a>
+            </li>
+            <li class="nav-item">
+                <a id="reportbtn" class="nav-link" href="#">Report</i></a>
+            </li>
 
-            </ul>
-            <form class="form-inline my-2 my-lg-0" id="searchForm">
-                <input style="text-transform:uppercase" onkeyup="searchItem(this.value)" id="searchtxt"
-                    class="form-control mr-sm-2" type="search" placeholder="Model/Desc/Code" aria-label="Search">
-                <button class="btn btn-info my-2 my-sm-0" id="searchByBtn" type="submit">Find
-                </button>
-            </form>
+        </ul>
+        <form class="form-inline my-2 my-lg-0" id="searchForm">
+            <input style="text-transform:uppercase" onkeyup="searchItem(this.value)" id="searchtxt"
+                   class="form-control mr-sm-2" type="search" placeholder="Model/Desc/Code" aria-label="Search">
+            <button class="btn btn-info my-2 my-sm-0" id="searchByBtn" type="submit">Find
+            </button>
+        </form>
+    </div>
+</nav>
+
+<!------------------------------------------------------------------------------------------>
+<!----------------------------------ADD WINDOW---------------------------------------->
+<!------------------------------------------------------------------------------------------>
+
+
+<div id="addWindow" class="container" style="margin-top: 10px">
+    <table id="myTable" class="table table-striped table-bordered nowrap" style="width:100%">
+        <thead>
+        <tr>
+            <th style="display: none;">Id</th>
+            <th style="display: none;">Serial No</th>
+            <th>Model</th>
+            <th>Description</th>
+            <th>Code</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Amount</th>
+            <th>
+                <center>
+                    <button align="center" id="sortBtn" class="btn"
+                            style="background-color: #FCD7D7">Missing
+                    </button>&nbsp;&nbsp;
+                    <button align="center" id="NormalBtn" class="btn btn-info">Normal</button>
+                </center>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+
+<!------------------------------------------------------------------------------------------>
+<!----------------------------------SALE WINDOW---------------------------------------->
+<!------------------------------------------------------------------------------------------>
+
+
+<div id="saleWindow" style="display: none ; margin-top: 10px">
+
+    <div class="container">
+
+        <div class="row" style="margin-left: 1px">
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-9" style="padding-left: 0px; padding-right: 0px;">
+                        <select class="form-control" id="saleTypeD" onchange="saleTFun(this.value)" autofocus>
+                            <option value="Cash Sale">Cash Sale</option>
+                        </select>
+                    </div>
+
+
+                    <div class="col-md-3" style="padding-left: 0px; padding-right: 0px;">
+                        <button id="addCusbtn" class="btn btn-primary form-control">Add Customer</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6" style="text-align: right" id="BillNumber">
+
+            </div>
         </div>
-    </nav>
 
-    <!------------------------------------------------------------------------------------------>
-    <!----------------------------------ADD WINDOW---------------------------------------->
-    <!------------------------------------------------------------------------------------------>
+        <form onsubmit="return false">
 
+            <div class="input-group mb-3" style="margin-top: 5px">
+                <input type="text" id="saleI" class="form-control" placeholder="Search"
+                       onkeyup="SearchBillItem(this.value)"
+                       aria-label="Search Item" aria-describedby="basic-addon2">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onclick="SearchBillItem(document.getElementById('saleI').value)">Search</button>
+                </div>
+            </div>
 
-    <div id="addWindow" class="container" style="margin-top: 10px">
-        <table id="myTable" class="table table-striped table-bordered nowrap" style="width:100%">
+            <div class="form-group" style="margin-top: 5px">
+                <select multiple class="form-control" id="selectItemDesSO">
+
+                </select>
+            </div>
+        </form>
+
+        <table id="BillItemsTables" class="table table-striped table-bordered nowrap" align="center"
+               style="width:100%;">
             <thead>
-                <tr>
-                    <th style="display: none;">Id</th>
-                    <th style="display: none;">Serial No</th>
-                    <th>Model</th>
-                    <th>Description</th>
-                    <th>Code</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Amount</th>
-                    <th>
-                        <center>
-                            <button align="center" id="sortBtn" class="btn"
-                                style="background-color: #FCD7D7">Missing</button>&nbsp;&nbsp;
-                            <button align="center" id="NormalBtn" class="btn btn-info">Normal</button>
-                        </center>
-                    </th>
-                </tr>
+            <tr>
+                <th style="display: none;">Id</th>
+                <th>Model</th>
+                <th>Description</th>
+                <th>Code</th>
+                <th>Stock</th>
+                <th>Serial</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
             </thead>
-            <tbody>
+            <tbody id="billTable">
 
             </tbody>
         </table>
-    </div>
 
-    <!------------------------------------------------------------------------------------------>
-    <!----------------------------------SALE WINDOW---------------------------------------->
-    <!------------------------------------------------------------------------------------------>
-
-
-    <div id="saleWindow" style="display: none ; margin-top: 10px">
-
-        <div class="container">
-
-            <div class="row" style="margin-left: 1px">
-                <div class="col-md-6">
-                    <div class="row">
-                        <div class="col-md-9" style="padding-left: 0px; padding-right: 0px;">
-                            <select class="form-control" id="saleTypeD" onchange="saleTFun(this.value)" autofocus>
-                                <option value="Cash Sale">Cash Sale</option>
-                            </select>
-                        </div>
-
-
-                        <div class="col-md-3" style="padding-left: 0px; padding-right: 0px;">
-                            <button id="addCusbtn" class="btn btn-primary form-control">Add Customer</button>
-                        </div>
-                    </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Balance &nbsp;</span>
                 </div>
-
-                <div class="col-md-6" style="text-align: right" id="BillNumber">
-
+                <input type="text" id="balance" min="0" value="0" class="form-control" disabled
+                       aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Total Bill&nbsp;</span>
                 </div>
+                <input type="text" id="totalAmount" class="form-control" disabled aria-label="Username"
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Discount</span>
+                </div>
+                <input type="text" id="discount" min="0" value="0" onkeyup="checkDiscountCheck(this.value)"
+                       class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Paid Amt</span>
+                </div>
+                <input type="text" id="paid" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3" align="right">
+                <button class="btn btn-primary" id="submitbtn">&nbsp;Save&nbsp;</button>
+                <button class="btn btn-primary" id="printAndSaveBtn">Print&nbsp;</button>
+                <button class="btn btn-primary" id="cancelBill">Cancel</button>
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-md-3">
+                <button class="btn btn-info" style="display:none" id="calBill">Calculate Bill</button>
             </div>
 
-            <form>
+        </div>
+    </div>
+</div>
+
+<!------------------------------------------------------------------------------------------>
+<!----------------------------------Bill WINDOW---------------------------------------->
+<!------------------------------------------------------------------------------------------>
+
+<div id="billWindow" style="display: none ; margin-top: 10px">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <select class="form-control" id="saleTypeBE" autofocus>
+                    <option value="Cash Sale">Cash Sale</option>
+                </select>
+            </div>
+
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">From</span>
+                </div>
+                <input type="date" id="fromDate" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">To</span>
+                </div>
+                <input type="date" id="toDate" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1">
+            </div>
+
+            <div style="margin-left: 8px;">
+                <button type="submit" id="findBillbtn" class="btn btn-primary">Find</button>
+            </div>
+
+            <div style="margin-left: 8px;">
+                <button id="EditBillbtn" class="btn btn-danger">Edit Bill</button>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col">
                 <div class="form-group" style="margin-top: 5px">
-                    <select multiple class="form-control" id="selectItemDesSO">
+                    <select multiple class="form-control" id="selectItemBE">
 
                     </select>
                 </div>
-            </form>
-
-            <table id="BillItemsTables" class="table table-striped table-bordered nowrap" align="center"
-                style="width:100%;">
-                <thead>
-                    <tr>
-                        <th style="display: none;">Id</th>
-                        <th>Model</th>
-                        <th>Description</th>
-                        <th>Code</th>
-                        <th>Stock</th>
-                        <th>Serial</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Amount</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="billTable">
-
-                </tbody>
-            </table>
-
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Balance &nbsp;</span>
-                    </div>
-                    <input type="text" id="balance" min="0" value="0" class="form-control" disabled
-                        aria-label="Username" aria-describedby="basic-addon1">
-                </div>
             </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Total Bill&nbsp;</span>
-                    </div>
-                    <input type="text" id="totalAmount" class="form-control" disabled aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Discount</span>
-                    </div>
-                    <input type="text" id="discount" min="0" value="0" onkeyup="checkDiscountCheck(this.value)"
-                        class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Paid Amt</span>
-                    </div>
-                    <input type="text" id="paid" class="form-control" aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="col-md-3" align="right">
-                    <button class="btn btn-primary" id="submitbtn">&nbsp;Save&nbsp;</button>
-                    <button class="btn btn-primary" id="printAndSaveBtn">Print&nbsp;</button>
-                    <button class="btn btn-primary" id="cancelBill">Cancel</button>
-                </div>
-            </div>
+        </div>
+
+        <table class="table table-striped table-bordered nowrap" align="center" style="width:100%;">
+            <thead>
+            <tr>
+                <th style="display: none;">Id</th>
+                <th>Description</th>
+                <th>Code</th>
+                <th>Stock</th>
+                <th>Serial</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="billEditTable">
+
+            </tbody>
+        </table>
 
 
-            <div class="row">
-
-                <div class="col-md-3">
-                    <button class="btn btn-info" style="display:none" id="calBill">Calculate Bill</button>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Balance &nbsp;</span>
                 </div>
-
+                <input type="text" id="balanceBE" min="0" value="0" class="form-control" disabled
+                       aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Total Bill&nbsp;</span>
+                </div>
+                <input type="text" id="totalAmountBE" class="form-control" disabled aria-label="Username"
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Discount</span>
+                </div>
+                <input type="text" id="discountBE" min="0" value="0" onkeyup="checkDiscountCheck(this.value)"
+                       class="form-control" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="input-group mb-3  col-md-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Paid Amt</span>
+                </div>
+                <input type="text" id="paidBE" class="form-control" aria-label="Username"
+                       aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9"></div>
+            <div class="col-md-3" align="right">
+                <button class="btn btn-primary" id="printAndSaveBtnBE">Print&nbsp;</button>
+                <button class="btn btn-primary" id="cancelBillBE">Cancel</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!------------------------------------------------------------------------------------------>
-    <!----------------------------------Bill WINDOW---------------------------------------->
-    <!------------------------------------------------------------------------------------------>
+<!------------------------------------------------------------------------------------------>
+<!----------------------------------BackUp WINDOW---------------------------------------->
+<!------------------------------------------------------------------------------------------>
+<div id="reportWindow" style="display: none ; margin-top: 10px">
+    <div class="container">
+        <div class="row">
 
-    <div id="billWindow" style="display: none ; margin-top: 10px">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3">
-                    <select class="form-control" id="saleTypeBE" autofocus>
-                        <option value="Cash Sale">Cash Sale</option>
-                    </select>
-                </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="card" style="background-color: #008B8B">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:white">Total Inventory</h5>
+                        <h2 class="card-text" id="totalItems" style="color:white">0</h2>
 
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">From</span>
-                    </div>
-                    <input type="date" id="fromDate" class="form-control" aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div>
-
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">To</span>
-                    </div>
-                    <input type="date" id="toDate" class="form-control" aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div>
-
-                <div style="margin-left: 8px;">
-                    <button type="submit" id="findBillbtn" class="btn btn-primary">Find</button>
-                </div>
-
-                <div style="margin-left: 8px;">
-                    <button id="EditBillbtn" class="btn btn-danger">Edit Bill</button>
-                </div>
-
-
-            </div>
-
-            <div class="row">
-                <div class="col">
-                    <div class="form-group" style="margin-top: 5px">
-                        <select multiple class="form-control" id="selectItemBE">
-
-                        </select>
                     </div>
                 </div>
             </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="card " style="background-color: #008B8B">
 
-            <table class="table table-striped table-bordered nowrap" align="center" style="width:100%;">
-                <thead>
-                    <tr>
-                        <th style="display: none;">Id</th>
-                        <th>Description</th>
-                        <th>Code</th>
-                        <th>Stock</th>
-                        <th>Serial</th>
-                        <th>Price</th>
-                        <th>Qty</th>
-                        <th>Amount</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="billEditTable">
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:white">Total Cash Sale</h5>
+                        <h2 class="card-text" id="totalCashSale" style="color:white">0</h2>
 
-                </tbody>
-            </table>
-
-
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Balance &nbsp;</span>
                     </div>
-                    <input type="text" id="balanceBE" min="0" value="0" class="form-control" disabled
-                        aria-label="Username" aria-describedby="basic-addon1">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Total Bill&nbsp;</span>
-                    </div>
-                    <input type="text" id="totalAmountBE" class="form-control" disabled aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Discount</span>
-                    </div>
-                    <input type="text" id="discountBE" min="0" value="0" onkeyup="checkDiscountCheck(this.value)"
-                        class="form-control" aria-label="Username" aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="input-group mb-3  col-md-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text">Paid Amt</span>
-                    </div>
-                    <input type="text" id="paidBE" class="form-control" aria-label="Username"
-                        aria-describedby="basic-addon1">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-9"></div>
-                <div class="col-md-3" align="right">
-                    <button class="btn btn-primary" id="printAndSaveBtnBE">Print&nbsp;</button>
-                    <button class="btn btn-primary" id="cancelBillBE">Cancel</button>
-                </div>
-            </div>
-        </div>
-    </div>
+            <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="card " style="background-color: #008B8B">
 
-    <!------------------------------------------------------------------------------------------>
-    <!----------------------------------BackUp WINDOW---------------------------------------->
-    <!------------------------------------------------------------------------------------------>
-    <div id="reportWindow" style="display: none ; margin-top: 10px">
-        <div class="container">
-            <div class="row">
-               
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="card" style="background-color: #008B8B">
-                        <div class="card-body">
-                            <h5 class="card-title" style="color:white">Total Inventory</h5>
-                            <h2 class="card-text" id="totalItems" style="color:white">0</h2>
+                    <div class="card-body">
+                        <h5 class="card-title" style="color:white">Total Customer Sale</h5>
+                        <h2 class="card-text" id="totalCusSale" style="color:white">0</h2>
 
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="card " style="background-color: #008B8B">
-
-                        <div class="card-body">
-                            <h5 class="card-title" style="color:white">Total Cash Sale</h5>
-                            <h2 class="card-text" id="totalCashSale" style="color:white">0</h2>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-4 col-sm-6 col-xs-12">
-                    <div class="card " style="background-color: #008B8B">
-
-                        <div class="card-body">
-                            <h5 class="card-title" style="color:white">Total Customer Sale</h5>
-                            <h2 class="card-text" id="totalCusSale" style="color:white">0</h2>
-
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    </div>
-    <script>
-        const electron = require('electron');
-        const { ipcRenderer } = electron;
-        tbody = document.querySelector('tbody');
+</div>
+<script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
+    tbody = document.querySelector('tbody');
 
-        CustomerId = 0;
-        billId = 0;
-
-
-        // =============== Add Window Functions ============================
-
-        ipcRenderer.on('mainHtml:sendAllData', function (e, items) {
-            tbody.innerHTML = '';
-
-            for (item in items) {
-                i = items[item]
+    CustomerId = 0;
+    billId = 0;
 
 
-                row = `<td style="display: none;">${i['id']}</td>
+    // =============== Add Window Functions ============================
+
+    ipcRenderer.on('mainHtml:sendAllData', function (e, items) {
+        tbody.innerHTML = '';
+
+        for (item in items) {
+            i = items[item]
+
+
+            row = `<td style="display: none;">${i['id']}</td>
                     <td style="display: none;">${i['serial_no']}</td>
                           <td>${i['Model']}</td>
                           <td>${i['description']}</td>
@@ -379,197 +390,203 @@
                           <td>${i['unit_price'] * i['items']}</td>
                           <td><center><button onclick="editItem(${i['id']})" class="btn btn-warning">Edit</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="delItem(${i['id']})" class="btn btn-danger">Delete</button></center></td>`
 
-                tr = document.createElement('tr');
-                if (i['description'] == '' || i['CodeP'] == '' || i['items'] == 0 || i['unit_price'] == 0) {
-                    tr.style.backgroundColor = '#FCD7D7';
-                }
-
-                tr.innerHTML = row;
-                tbody.appendChild(tr);
+            tr = document.createElement('tr');
+            if (i['description'] == '' || i['CodeP'] == '' || i['items'] == 0 || i['unit_price'] == 0) {
+                tr.style.backgroundColor = '#FCD7D7';
             }
-        });
 
-
-        document.getElementById('sortBtn').addEventListener('click', function (e, data) {
-            ipcRenderer.send('main:searchItem', 'showUnfill');
-        });
-        document.getElementById('NormalBtn').addEventListener('click', function (e, data) {
-            ipcRenderer.send('main:searchItem', '');
-        });
-
-
-        function searchItem(itemName) {
-            // // // // // console.log(itemName);
-            ipcRenderer.send('main:searchItem', itemName);
+            tr.innerHTML = row;
+            tbody.appendChild(tr);
         }
+    });
 
-        function delItem(id) {
-            // // // // // console.log(id);
-            ipcRenderer.send('main:delItem', id);
+
+    document.getElementById('sortBtn').addEventListener('click', function (e, data) {
+        ipcRenderer.send('main:searchItem', 'showUnfill');
+    });
+    document.getElementById('NormalBtn').addEventListener('click', function (e, data) {
+        ipcRenderer.send('main:searchItem', '');
+    });
+
+
+    function searchItem(itemName) {
+        // // // // // console.log(itemName);
+        ipcRenderer.send('main:searchItem', itemName);
+    }
+
+    function delItem(id) {
+        // // // // // console.log(id);
+        ipcRenderer.send('main:delItem', id);
+    }
+
+    function editItem(id) {
+        // // // // // console.log(id);
+        ipcRenderer.send('main:editItem', id);
+    }
+
+    ipcRenderer.on('mainWindow:delSucess', function (e, data) {
+        if (data) {
+            // // // // // console.log('delete sucessfully');
         }
+    });
 
-        function editItem(id) {
-            // // // // // console.log(id);
-            ipcRenderer.send('main:editItem', id);
-        }
+    ipcRenderer.on('delItemError', function (e, data) {
+        alert(data);
+    });
 
-        ipcRenderer.on('mainWindow:delSucess', function (e, data) {
-            if (data) {
-                // // // // // console.log('delete sucessfully');
-            }
-        });
+    //==================== Nav Bar Functions ================================
 
-        ipcRenderer.on('delItemError', function (e, data) {
-            alert(data);
-        });
+    document.querySelector('#addbtn').style.color = 'white';
+    document.querySelector('#addbtn').style.fontWeight = 'bold';
 
-        //==================== Nav Bar Functions ================================
+    document.querySelector('#searchByBtn').addEventListener('click', function (e) {
+        e.preventDefault();
 
+        itemName = document.querySelector('#searchtxt').value;
+        ipcRenderer.send('main:searchItem', itemName);
+    });
+
+    document.querySelector('#addbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector('#billWindow').style.display = 'none';
+        document.querySelector('#addWindow').style.display = 'block';
+        document.querySelector('#saleWindow').style.display = 'none';
+        document.querySelector('#reportWindow').style.display = 'none';
+        document.querySelector('#searchForm').style.display = 'block';
+        ipcRenderer.send('main:searchItem', '');
         document.querySelector('#addbtn').style.color = 'white';
         document.querySelector('#addbtn').style.fontWeight = 'bold';
 
-        document.querySelector('#searchByBtn').addEventListener('click', function (e) {
-            e.preventDefault();
+        document.querySelector('#billbtn').style.color = '';
+        document.querySelector('#billbtn').style.fontWeight = '';
 
-            itemName = document.querySelector('#searchtxt').value;
-            ipcRenderer.send('main:searchItem', itemName);
-        });
+        document.querySelector('#salebtn').style.color = '';
+        document.querySelector('#salebtn').style.fontWeight = '';
 
-        document.querySelector('#addbtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector('#billWindow').style.display = 'none';
-            document.querySelector('#addWindow').style.display = 'block';
-            document.querySelector('#saleWindow').style.display = 'none';
-            document.querySelector('#reportWindow').style.display = 'none';
-            document.querySelector('#searchForm').style.display = 'block';
-            ipcRenderer.send('main:searchItem', '');
-            document.querySelector('#addbtn').style.color = 'white';
-            document.querySelector('#addbtn').style.fontWeight = 'bold';
+        document.querySelector('#reportbtn').style.color = '';
+        document.querySelector('#reportbtn').style.fontWeight = '';
+    })
 
-            document.querySelector('#billbtn').style.color = '';
-            document.querySelector('#billbtn').style.fontWeight = '';
+    document.getElementById('salebtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        // // // // // console.log('sale btn click');
+        document.querySelector('#billWindow').style.display = 'none';
+        document.querySelector('#reportWindow').style.display = 'none';
+        document.querySelector('#saleWindow').style.display = 'block';
+        document.querySelector('#addWindow').style.display = 'none';
+        document.querySelector('#searchForm').style.display = 'none';
+        ipcRenderer.send('saleItemSearch', '');
+        ipcRenderer.send('getItemsFromDb', '');
+        document.querySelector('#saleTypeD').focus();
+        ipcRenderer.send('getBillId', '');
 
-            document.querySelector('#salebtn').style.color = '';
-            document.querySelector('#salebtn').style.fontWeight = '';
+        document.querySelector('#salebtn').style.color = 'white';
+        document.querySelector('#salebtn').style.fontWeight = 'bold';
 
-            document.querySelector('#reportbtn').style.color = '';
-            document.querySelector('#reportbtn').style.fontWeight = '';
-        })
+        document.querySelector('#addbtn').style.color = '';
+        document.querySelector('#addbtn').style.fontWeight = '';
 
-        document.getElementById('salebtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            // // // // // console.log('sale btn click');
-            document.querySelector('#billWindow').style.display = 'none';
-            document.querySelector('#reportWindow').style.display = 'none';
-            document.querySelector('#saleWindow').style.display = 'block';
-            document.querySelector('#addWindow').style.display = 'none';
-            document.querySelector('#searchForm').style.display = 'none';
-            ipcRenderer.send('saleItemSearch', '');
-            ipcRenderer.send('getItemsFromDb', '');
-            document.querySelector('#saleTypeD').focus();
-            ipcRenderer.send('getBillId', '');
+        document.querySelector('#billbtn').style.color = '';
+        document.querySelector('#billbtn').style.fontWeight = '';
+        // ipcRenderer.send('main:sale', 'open sale window');
 
-            document.querySelector('#salebtn').style.color = 'white';
-            document.querySelector('#salebtn').style.fontWeight = 'bold';
+        document.querySelector('#reportbtn').style.color = '';
+        document.querySelector('#reportbtn').style.fontWeight = '';
 
-            document.querySelector('#addbtn').style.color = '';
-            document.querySelector('#addbtn').style.fontWeight = '';
+    });
 
-            document.querySelector('#billbtn').style.color = '';
-            document.querySelector('#billbtn').style.fontWeight = '';
-            // ipcRenderer.send('main:sale', 'open sale window');
+    document.querySelector('#billbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector('#reportWindow').style.display = 'none';
+        document.querySelector('#saleWindow').style.display = 'none';
+        document.querySelector('#addWindow').style.display = 'none';
+        document.querySelector('#searchForm').style.display = 'none';
+        document.querySelector('#billWindow').style.display = 'block';
+        document.querySelector('#saleTypeBE').focus();
 
-            document.querySelector('#reportbtn').style.color = '';
-            document.querySelector('#reportbtn').style.fontWeight = '';
+        document.querySelector('#billbtn').style.color = 'white';
+        document.querySelector('#billbtn').style.fontWeight = 'bold';
 
-        });
+        document.querySelector('#addbtn').style.color = '';
+        document.querySelector('#addbtn').style.fontWeight = '';
 
-        document.querySelector('#billbtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector('#reportWindow').style.display = 'none';
-            document.querySelector('#saleWindow').style.display = 'none';
-            document.querySelector('#addWindow').style.display = 'none';
-            document.querySelector('#searchForm').style.display = 'none';
-            document.querySelector('#billWindow').style.display = 'block';
-            document.querySelector('#saleTypeBE').focus();
-
-            document.querySelector('#billbtn').style.color = 'white';
-            document.querySelector('#billbtn').style.fontWeight = 'bold';
-
-            document.querySelector('#addbtn').style.color = '';
-            document.querySelector('#addbtn').style.fontWeight = '';
-
-            document.querySelector('#salebtn').style.color = '';
-            document.querySelector('#salebtn').style.fontWeight = '';
+        document.querySelector('#salebtn').style.color = '';
+        document.querySelector('#salebtn').style.fontWeight = '';
 
 
-            document.querySelector('#reportbtn').style.color = '';
-            document.querySelector('#reportbtn').style.fontWeight = '';
-        });
+        document.querySelector('#reportbtn').style.color = '';
+        document.querySelector('#reportbtn').style.fontWeight = '';
+    });
 
-        document.querySelector('#reportbtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector('#addWindow').style.display = 'none';
-            document.querySelector('#saleWindow').style.display = 'none';
-            document.querySelector('#reportWindow').style.display = 'block';
-            document.querySelector('#billWindow').style.display = 'none';
-            document.querySelector('#searchForm').style.display = 'none';
+    document.querySelector('#reportbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector('#addWindow').style.display = 'none';
+        document.querySelector('#saleWindow').style.display = 'none';
+        document.querySelector('#reportWindow').style.display = 'block';
+        document.querySelector('#billWindow').style.display = 'none';
+        document.querySelector('#searchForm').style.display = 'none';
 
-            document.querySelector('#addbtn').style.color = '';
-            document.querySelector('#addbtn').style.fontWeight = '';
+        document.querySelector('#addbtn').style.color = '';
+        document.querySelector('#addbtn').style.fontWeight = '';
 
-            document.querySelector('#billbtn').style.color = '';
-            document.querySelector('#billbtn').style.fontWeight = '';
+        document.querySelector('#billbtn').style.color = '';
+        document.querySelector('#billbtn').style.fontWeight = '';
 
-            document.querySelector('#salebtn').style.color = '';
-            document.querySelector('#salebtn').style.fontWeight = '';
+        document.querySelector('#salebtn').style.color = '';
+        document.querySelector('#salebtn').style.fontWeight = '';
 
-            document.querySelector('#reportbtn').style.color = 'white';
-            document.querySelector('#reportbtn').style.fontWeight = 'bold';
+        document.querySelector('#reportbtn').style.color = 'white';
+        document.querySelector('#reportbtn').style.fontWeight = 'bold';
 
-            ipcRenderer.send('report:getSummary', '');
-        });
+        ipcRenderer.send('report:getSummary', '');
+    });
 
-        //======================== Sale Window Functions ==========================
-        document.querySelector('#selectItemDesSO').addEventListener('keyup', function (e) {
+    //======================== Sale Window Functions ==========================
+    document.querySelector('#selectItemDesSO').addEventListener('keyup', function (e) {
 
-            if (e.keyCode == 13) {
-                var selItem = document.getElementById('selectItemDesSO').value;
-                ipcRenderer.send('main:getItemDetail', selItem);
+        if (e.keyCode == 13) {
+            var selItem = document.getElementById('selectItemDesSO').value;
+            ipcRenderer.send('main:getItemDetail', selItem);
+        }
+    });
+
+    function SearchBillItem(val){
+        console.log('Search Item = ' + val);
+        ipcRenderer.send('sale:saleItemSearch' , val);
+    }
+
+    ipcRenderer.on('Sale:sendItems', function (e, data) {
+        if (data) {
+            console.log(data);
+            document.getElementById("selectItemDesSO").innerHTML = '';
+            for (item in data) {
+                var option = document.createElement("option");
+                // option.text = data[item]['Model'] + '  ----------------  ' + data[item]['description'];
+                option.text = data[item]['description'] + '  ----------------  ' + data[item]['Model'];
+                option.value = data[item]['id'];
+                var select = document.getElementById("selectItemDesSO");
+                if (data[item]['items'] <= 0) {
+                    option.style.backgroundColor = '#FCD7D7';
+                }
+                select.appendChild(option);
             }
-        });
+        }
+    });
 
-        ipcRenderer.on('Sale:sendItems', function (e, data) {
-            if (data) {
-                console.log(data);
-                document.getElementById("selectItemDesSO").innerHTML = '';
-                for (item in data) {
-                    var option = document.createElement("option");
-                    option.text = data[item]['Model'] + '  ----------------  ' + data[item]['description'];
-                    option.value = data[item]['id'];
-                    var select = document.getElementById("selectItemDesSO");
-                    if(data[item]['items'] <= 0){
-                        option.style.backgroundColor = '#FCD7D7';
-                    }
-                    select.appendChild(option);
+    ipcRenderer.on('Sale:sendItemDetail', function (e, data) {
+        if (data) {
+            console.log(data);
+            i = data[0];
+            var table = document.getElementById('billTable');
+            find = false;
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+                if (eval(table.rows[r].cells[0].innerHTML) == i['id']) {
+                    find = true;
                 }
             }
-        });
+            if (!find && i['items'] > 0) {
 
-        ipcRenderer.on('Sale:sendItemDetail', function (e, data) {
-            if (data) {
-                console.log(data);
-                i = data[0];
-                var table = document.getElementById('billTable');
-                find = false;
-                for (var r = 0, n = table.rows.length; r < n; r++) {
-                    if (eval(table.rows[r].cells[0].innerHTML) == i['id']) {
-                        find = true;
-                    }
-                }
-                if (!find && i['items'] > 0) {
-                    
-                    row = `<td style="display: none;">${i['id']}</td>
+                row = `<td style="display: none;">${i['id']}</td>
                             <td>${i['Model']}</td>
                             <td>${i['description']}</td>
                             <td>${i['CodeP']}</td>
@@ -582,406 +599,406 @@
                                 <button onclick="delRow(${i['id']})" class="btn btn-danger">x</button>
                             </td>`;
 
-                    bTB = document.querySelector('#billTable');
-                    tr = document.createElement('tr');
-                    tr.innerHTML = row
-                    bTB.appendChild(tr);
+                bTB = document.querySelector('#billTable');
+                tr = document.createElement('tr');
+                tr.innerHTML = row
+                bTB.appendChild(tr);
+            }
+        }
+    })
+
+    document.querySelector('#addCusbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        ipcRenderer.send("addCustomer", '');
+    });
+
+    ipcRenderer.on('RefreshSaleTvb', function (e, data) {
+        // // // // // // console.log(data);
+        option = document.createElement("option");
+        option.text = data;
+        option.value = data;
+        selectSale = document.getElementById("saleTypeD");
+        selectSale.appendChild(option);
+
+        optionBE = document.createElement("option");
+        optionBE.text = data;
+        optionBE.value = data;
+        selectSaleBE = document.getElementById("saleTypeBE");
+        selectSaleBE.appendChild(optionBE);
+
+    });
+
+    function saleTFun(val) {
+        console.log(val);
+        ipcRenderer.send('getCustomerBalance', val);
+    }
+
+    ipcRenderer.on('SendCusIDPend', function (e, data) {
+        if (data) {
+            // // // // // console.log(data);
+            if (data.length == 0) {
+                document.getElementById('balance').value = 0;
+                CustomerId = 0;
+            } else {
+                document.getElementById('balance').value = data[0]['pending'];
+                CustomerId = data[0]['cusid'];
+            }
+        }
+    })
+
+    ipcRenderer.send('getAllCustomer', '');
+
+    function delRow(id) {
+        console.log('selected item id = ', id);
+        var table = document.getElementById('billTable');
+        try {
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+                if (Number(table.rows[r].cells[0].innerHTML) === id) {
+                    document.querySelector('#billTable').deleteRow(table.rows[r].rowIndex - 1);
                 }
             }
-        })
+        } catch (e) {
 
-        document.querySelector('#addCusbtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            ipcRenderer.send("addCustomer", '');
-        });
-
-        ipcRenderer.on('RefreshSaleTvb', function (e, data) {
-            // // // // // // console.log(data);
-            option = document.createElement("option");
-            option.text = data;
-            option.value = data;
-            selectSale = document.getElementById("saleTypeD");
-            selectSale.appendChild(option);
-
-            optionBE = document.createElement("option");
-            optionBE.text = data;
-            optionBE.value = data;
-            selectSaleBE = document.getElementById("saleTypeBE");
-            selectSaleBE.appendChild(optionBE);
-
-        });
-
-        function saleTFun(val) {
-            console.log(val);
-            ipcRenderer.send('getCustomerBalance', val);
-        }
-
-        ipcRenderer.on('SendCusIDPend', function (e, data) {
-            if (data) {
-                // // // // // console.log(data);
-                if (data.length == 0) {
+        } finally {
+            if (table.rows.length == 0) {
+                if (Number(document.getElementById('balance').value == '')) {
                     document.getElementById('balance').value = 0;
-                    CustomerId = 0;
+                    document.getElementById('totalAmount').value = 0;
+                    document.getElementById('discount').value = 0;
+                    document.getElementById('paid').value = 0;
                 } else {
-                    document.getElementById('balance').value = data[0]['pending'];
-                    CustomerId = data[0]['cusid'];
+                    document.getElementById('totalAmount').value = Number(document.getElementById('balance').value);
+                    document.getElementById('discount').value = 0;
+                    document.getElementById('paid').value = Number(document.getElementById('balance').value);
                 }
-            }
-        })
-
-        ipcRenderer.send('getAllCustomer', '');
-
-        function delRow(id) {
-            console.log('selected item id = ', id);
-            var table = document.getElementById('billTable');
-            try {
-                for (var r = 0, n = table.rows.length; r < n; r++) {
-                    if (Number(table.rows[r].cells[0].innerHTML) === id) {
-                        document.querySelector('#billTable').deleteRow(table.rows[r].rowIndex - 1);
-                    }
-                }
-            } catch (e) {
-
-            } finally {
-                if (table.rows.length == 0) {
-                    if (Number(document.getElementById('balance').value == '')) {
-                        document.getElementById('balance').value = 0;
-                        document.getElementById('totalAmount').value = 0;
-                        document.getElementById('discount').value = 0;
-                        document.getElementById('paid').value = 0;
-                    } else {
-                        document.getElementById('totalAmount').value = Number(document.getElementById('balance').value);
-                        document.getElementById('discount').value = 0;
-                        document.getElementById('paid').value = Number(document.getElementById('balance').value);
-                    }
-
-                }
-                // Re Calculate Bill
-                var bal = document.getElementById('balance').value;
-                var dis = document.getElementById('discount').value;
-                Amount = 0;
-                for (var r = 0, n = table.rows.length; r < n; r++) {
-                    // // // // // // console.log(table.rows[r].cells[6].value, '----', table.rows[r].cells[5].innerHTML);
-                    Amount = Amount + (Number(table.rows[r].cells[7].children[0].value)) * Number(table.rows[r].cells[6].children[0].value);
-                }
-                document.getElementById('totalAmount').value = Amount + Number(bal);
-                document.getElementById(`paid`).value = (Amount + Number(bal)) - Number(dis);
-            }
-        }
-
-        ipcRenderer.on('sendAllCusName', function (e, data) {
-            if (data) {
-                for (name in data) {
-                    // // // // // console.log(data[name]['name']);
-                    option = document.createElement("option");
-                    option.text = data[name]['name'];
-                    option.value = data[name]['name'];
-                    selectSale = document.getElementById("saleTypeD");
-                    selectSale.appendChild(option);
-
-                    optionBE = document.createElement("option");
-                    optionBE.text = data[name]['name'];
-                    optionBE.value = data[name]['name'];
-                    selectSaleBE = document.getElementById("saleTypeBE");
-                    selectSaleBE.appendChild(optionBE);
-                }
-            }
-        })
-
-        function searchItemSale(val) {
-            ipcRenderer.send('saleItemSearch', val);
-        }
-
-        ipcRenderer.on('sendPredictedBillId', function (e, data) {
-            if (data) {
-
-                //// // // // // console.log('next bill id = ' , data);
-                billDiv = document.getElementById('BillNumber');
-                billDiv.innerHTML = '';
-                h2 = document.createElement('h2');
-                h2.innerHTML = 'Bill No : ' + Number(data[0]['billNo'] + 1);
-                billDiv.appendChild(h2);
 
             }
-        })
-
-        function checkDiscountCheck(dis) {
-            if (dis > Number(document.getElementById('totalAmount').value)) {
-                document.getElementById('discount').value = 0;
-            } else {
-                document.getElementById('paid').value = Number(document.getElementById('totalAmount').value) - dis;
-            }
-        }
-
-        function priceQty(ref, items, itemId) {
-            qty = document.getElementById(`SI+${itemId}`).value;
+            // Re Calculate Bill
             var bal = document.getElementById('balance').value;
+            var dis = document.getElementById('discount').value;
             Amount = 0;
-            var table = document.getElementById('billTable');
             for (var r = 0, n = table.rows.length; r < n; r++) {
                 // // // // // // console.log(table.rows[r].cells[6].value, '----', table.rows[r].cells[5].innerHTML);
                 Amount = Amount + (Number(table.rows[r].cells[7].children[0].value)) * Number(table.rows[r].cells[6].children[0].value);
             }
             document.getElementById('totalAmount').value = Amount + Number(bal);
-            document.getElementById(`paid`).value = Amount + Number(bal);
+            document.getElementById(`paid`).value = (Amount + Number(bal)) - Number(dis);
+        }
+    }
 
-            if (ref.value == '') {
-                document.getElementById(`calAmount+${itemId}`).innerHTML = Number(qty) * Number(0);
-            } else {
-                document.getElementById(`calAmount+${itemId}`).innerHTML = Number(qty) * Number(ref.value);
+    ipcRenderer.on('sendAllCusName', function (e, data) {
+        if (data) {
+            for (name in data) {
+                // // // // // console.log(data[name]['name']);
+                option = document.createElement("option");
+                option.text = data[name]['name'];
+                option.value = data[name]['name'];
+                selectSale = document.getElementById("saleTypeD");
+                selectSale.appendChild(option);
+
+                optionBE = document.createElement("option");
+                optionBE.text = data[name]['name'];
+                optionBE.value = data[name]['name'];
+                selectSaleBE = document.getElementById("saleTypeBE");
+                selectSaleBE.appendChild(optionBE);
             }
         }
+    })
 
-        function checkItemQty(ref, available, itemId) {
-            // // // // // // console.log('check Items Qty' , ref.value , available);
-            up = document.getElementById(`BU+${itemId}`).value;
-            if (ref.value > available) {
-                ref.value = 1;
-                window.alert(`Your available stock is ${available}`);
-            }
+    function searchItemSale(val) {
+        ipcRenderer.send('saleItemSearch', val);
+    }
 
-            var bal = document.getElementById('balance').value;
-            Amount = 0;
-            var table = document.getElementById('billTable');
-            for (var r = 0, n = table.rows.length; r < n; r++) {
-                // // // // // // console.log(table.rows[r].cells[6].value, '----', table.rows[r].cells[5].innerHTML);
-                Amount = Amount + (Number(table.rows[r].cells[7].children[0].value)) * Number(table.rows[r].cells[6].children[0].value);
-            }
-            document.getElementById('totalAmount').value = Amount + Number(bal);
-            document.getElementById(`paid`).value = Amount + Number(bal);
+    ipcRenderer.on('sendPredictedBillId', function (e, data) {
+        if (data) {
 
-            if (ref.value == '') {
-                document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(1);
-            } else {
-                document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(ref.value);
-            }
-
+            //// // // // // console.log('next bill id = ' , data);
+            billDiv = document.getElementById('BillNumber');
+            billDiv.innerHTML = '';
+            h2 = document.createElement('h2');
+            h2.innerHTML = 'Bill No : ' + Number(data[0]['billNo'] + 1);
+            billDiv.appendChild(h2);
 
         }
+    })
 
-        document.getElementById('calBill').addEventListener('click', function (e) {
-            e.preventDefault();
-            //document.getElementById('totalBill').value = document.getElementById('totalAmount').value + document.getElementById('balance').value;
-        })
-
-        document.getElementById('submitbtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            billDis = 0;
-            billPaid = 0;
-            var amt = document.getElementById('totalAmount').value;
-            if (Number(amt) > 0) {
-
-                // // // // // // console.log('press print btn');
-                var table = document.getElementById('billTable');
-                data = [];
-                // // // // // // console.log(data);
-                var today = new Date();
-                var dd = today.getDate();
-                var mm = today.getMonth() + 1; //January is 0!
-                var yyyy = today.getFullYear();
-
-                if (dd < 10) {
-                    dd = '0' + dd
-                }
-
-                if (mm < 10) {
-                    mm = '0' + mm
-                }
-
-                today = yyyy + '-' + mm + '-' + dd;
-                for (var r = 0, n = table.rows.length; r < n; r++) {
-                    obj = {
-                        'Id': table.rows[r].cells[0].innerHTML,
-                        'Des': table.rows[r].cells[2].innerHTML,
-                        'SerialNo': table.rows[r].cells[5].children[0].value.toUpperCase(),
-                        'Price': table.rows[r].cells[6].children[0].value,
-                        'Qty': table.rows[r].cells[7].children[0].value,
-                        'Date': today
-                    }
-                    data.push(obj);
-                }
-                if (document.getElementById('discount').value == '') {
-                    billDis = 0;
-                } else {
-                    billDis = document.getElementById('discount').value;
-                }
-                if (document.getElementById('paid').value == '') {
-                    billPaid = 0;
-                } else {
-                    billPaid = document.getElementById('paid').value;
-                }
-
-                bill = {
-                    'Cid': CustomerId,
-                    'Amount': document.getElementById('totalAmount').value,
-                    'Discount': billDis,
-                    'Paid': billPaid,
-                    'Balance': document.getElementById('balance').value,
-                    'Detail': data,
-                    'SaleType': document.getElementById('saleTypeD').value,
-                    'Comment': ''
-                }
-                // // // // // console.log(bill);
-                ipcRenderer.send('SaveBill', bill);
-            } else {
-                window.alert('Before Submit make Bill first');
-            }
-        });
-
-        document.getElementById('printAndSaveBtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            // // // // // // console.log('press print btn');
-            billDis = 0;
-            billPaid = 0;
-
-            if (Number(document.getElementById('totalAmount').value) > 0) {
-                var table = document.getElementById('billTable');
-                data = [];
-                // // // // // // console.log(data);
-                var today = new Date();
-                var dd = today.getDate();
-                var mm = today.getMonth() + 1; //January is 0!
-                var yyyy = today.getFullYear();
-
-                if (dd < 10) {
-                    dd = '0' + dd
-                }
-
-                if (mm < 10) {
-                    mm = '0' + mm
-                }
-
-                today = yyyy + '-' + mm + '-' + dd;
-                for (var r = 0, n = table.rows.length; r < n; r++) {
-                    obj = {
-                        'Id': table.rows[r].cells[0].innerHTML,
-                        'Des': table.rows[r].cells[2].innerHTML,
-                        'SerialNo': table.rows[r].cells[5].children[0].value.toUpperCase(),
-                        'Price': table.rows[r].cells[6].children[0].value,
-                        'Qty': table.rows[r].cells[7].children[0].value,
-                        'Date': today
-                    }
-                    data.push(obj);
-                    // // // // // console.log('serial No is = ', table.rows[r].cells[5].children[0].value);
-
-                }
-
-                if (document.getElementById('discount').value == '') {
-                    billDis = 0;
-                } else {
-                    billDis = document.getElementById('discount').value;
-                }
-                if (document.getElementById('paid').value == '') {
-                    billPaid = 0;
-                } else {
-                    billPaid = document.getElementById('paid').value;
-                }
-
-                bill = {
-                    'Cid': CustomerId,
-                    'Amount': document.getElementById('totalAmount').value,
-                    'Discount': billDis,
-                    'Paid': billPaid,
-                    'Balance': document.getElementById('balance').value,
-                    'Detail': data,
-                    'SaleType': document.getElementById('saleTypeD').value,
-                    'Comment': ''
-                }
-                ipcRenderer.send('SaveAndPrintbill', bill);
-            } else {
-                window.alert('Before Print make Bill first');
-            }
-        });
-
-        ipcRenderer.on('BillSaveSubmit', function (e, data) {
-
-            if (data) {
-                document.querySelector('#saleTypeD').focus();
-                window.alert(data);
-                ClearSaleBill();
-            }
-        });
-
-        document.querySelector('#cancelBill').addEventListener('click', function (e) {
-            document.querySelector('#saleTypeD').focus();
-            ClearSaleBill();
-        });
-
-        function ClearSaleBill() {
-            document.querySelector('#billTable').innerHTML = '';
-            document.querySelector('#totalAmount').value = 0;
+    function checkDiscountCheck(dis) {
+        if (dis > Number(document.getElementById('totalAmount').value)) {
             document.getElementById('discount').value = 0;
-            document.getElementById('paid').value = 0;
-            document.getElementById('balance').value = 0;
-            document.getElementById('saleTypeD').value = 'Cash Sale';
-            CustomerId = 0;
-            ipcRenderer.send('getBillId', '');
+        } else {
+            document.getElementById('paid').value = Number(document.getElementById('totalAmount').value) - dis;
+        }
+    }
+
+    function priceQty(ref, items, itemId) {
+        qty = document.getElementById(`SI+${itemId}`).value;
+        var bal = document.getElementById('balance').value;
+        Amount = 0;
+        var table = document.getElementById('billTable');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            // // // // // // console.log(table.rows[r].cells[6].value, '----', table.rows[r].cells[5].innerHTML);
+            Amount = Amount + (Number(table.rows[r].cells[7].children[0].value)) * Number(table.rows[r].cells[6].children[0].value);
+        }
+        document.getElementById('totalAmount').value = Amount + Number(bal);
+        document.getElementById(`paid`).value = Amount + Number(bal);
+
+        if (ref.value == '') {
+            document.getElementById(`calAmount+${itemId}`).innerHTML = Number(qty) * Number(0);
+        } else {
+            document.getElementById(`calAmount+${itemId}`).innerHTML = Number(qty) * Number(ref.value);
+        }
+    }
+
+    function checkItemQty(ref, available, itemId) {
+        // // // // // // console.log('check Items Qty' , ref.value , available);
+        up = document.getElementById(`BU+${itemId}`).value;
+        if (ref.value > available) {
+            ref.value = 1;
+            window.alert(`Your available stock is ${available}`);
+        }
+
+        var bal = document.getElementById('balance').value;
+        Amount = 0;
+        var table = document.getElementById('billTable');
+        for (var r = 0, n = table.rows.length; r < n; r++) {
+            // // // // // // console.log(table.rows[r].cells[6].value, '----', table.rows[r].cells[5].innerHTML);
+            Amount = Amount + (Number(table.rows[r].cells[7].children[0].value)) * Number(table.rows[r].cells[6].children[0].value);
+        }
+        document.getElementById('totalAmount').value = Amount + Number(bal);
+        document.getElementById(`paid`).value = Amount + Number(bal);
+
+        if (ref.value == '') {
+            document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(1);
+        } else {
+            document.getElementById(`calAmount+${itemId}`).innerHTML = Number(up) * Number(ref.value);
         }
 
 
-        //======================== Bill Window Functions ==========================
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
+    }
 
-        if (dd < 10) {
-            dd = '0' + dd
-        }
+    document.getElementById('calBill').addEventListener('click', function (e) {
+        e.preventDefault();
+        //document.getElementById('totalBill').value = document.getElementById('totalAmount').value + document.getElementById('balance').value;
+    })
 
-        if (mm < 10) {
-            mm = '0' + mm
-        }
+    document.getElementById('submitbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        billDis = 0;
+        billPaid = 0;
+        var amt = document.getElementById('totalAmount').value;
+        if (Number(amt) > 0) {
 
-        today = yyyy + '-' + mm + '-' + dd;
+            // // // // // // console.log('press print btn');
+            var table = document.getElementById('billTable');
+            data = [];
+            // // // // // // console.log(data);
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
 
-        document.getElementById('fromDate').value = today;
-        document.getElementById('toDate').value = today;
+            if (dd < 10) {
+                dd = '0' + dd
+            }
 
-        document.getElementById('findBillbtn').addEventListener('click', function (e, data) {
-            e.preventDefault();
-            fromD = document.getElementById('fromDate').value;
-            toD = document.getElementById('toDate').value;
-            cusType = document.getElementById('saleTypeBE').value;
+            if (mm < 10) {
+                mm = '0' + mm
+            }
 
-            ipcRenderer.send('main:getAllBillId', { fromD, toD, cusType });
-            //console.log(fromD , toD , cusType);
-        });
-
-        ipcRenderer.on('main:sendBilldetail', function (e, data) {
-            if (data) {
-                //console.log(data); selectItemBE
-                document.getElementById("selectItemBE").innerHTML = '';
-                for (item in data) {
-                    var option = document.createElement("option");
-                    option.text = data[item]['billid'];
-                    option.value = data[item]['billid'];
-                    var select = document.getElementById("selectItemBE");
-                    select.appendChild(option);
+            today = yyyy + '-' + mm + '-' + dd;
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+                obj = {
+                    'Id': table.rows[r].cells[0].innerHTML,
+                    'Des': table.rows[r].cells[2].innerHTML,
+                    'SerialNo': table.rows[r].cells[5].children[0].value.toUpperCase(),
+                    'Price': table.rows[r].cells[6].children[0].value,
+                    'Qty': table.rows[r].cells[7].children[0].value,
+                    'Date': today
                 }
+                data.push(obj);
             }
-        });
-
-        document.querySelector('#selectItemBE').addEventListener('keyup', function (e) {
-            // // // // // console.log('key up listen', e.keyCode);
-            if (e.keyCode == 13) {
-                var billid = document.getElementById('selectItemBE').value;
-                billId = billid;
-                ipcRenderer.send('main:getAllBillDetail', billid);
+            if (document.getElementById('discount').value == '') {
+                billDis = 0;
+            } else {
+                billDis = document.getElementById('discount').value;
+            }
+            if (document.getElementById('paid').value == '') {
+                billPaid = 0;
+            } else {
+                billPaid = document.getElementById('paid').value;
             }
 
-        });
+            bill = {
+                'Cid': CustomerId,
+                'Amount': document.getElementById('totalAmount').value,
+                'Discount': billDis,
+                'Paid': billPaid,
+                'Balance': document.getElementById('balance').value,
+                'Detail': data,
+                'SaleType': document.getElementById('saleTypeD').value,
+                'Comment': ''
+            }
+            // // // // // console.log(bill);
+            ipcRenderer.send('SaveBill', bill);
+        } else {
+            window.alert('Before Submit make Bill first');
+        }
+    });
 
-        ipcRenderer.on('billWindow:billDetails', function (e, data) {
-            if (data) {
-                console.log(data);
-                table = document.getElementById('billEditTable');
-                table.innerHTML = '';
+    document.getElementById('printAndSaveBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        // // // // // // console.log('press print btn');
+        billDis = 0;
+        billPaid = 0;
 
-                for (item in data) {
-                    i = data[item];
+        if (Number(document.getElementById('totalAmount').value) > 0) {
+            var table = document.getElementById('billTable');
+            data = [];
+            // // // // // // console.log(data);
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; //January is 0!
+            var yyyy = today.getFullYear();
 
-                    row = `<td style="display: none;">${i['itemId']}</td>
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+
+            today = yyyy + '-' + mm + '-' + dd;
+            for (var r = 0, n = table.rows.length; r < n; r++) {
+                obj = {
+                    'Id': table.rows[r].cells[0].innerHTML,
+                    'Des': table.rows[r].cells[2].innerHTML,
+                    'SerialNo': table.rows[r].cells[5].children[0].value.toUpperCase(),
+                    'Price': table.rows[r].cells[6].children[0].value,
+                    'Qty': table.rows[r].cells[7].children[0].value,
+                    'Date': today
+                }
+                data.push(obj);
+                // // // // // console.log('serial No is = ', table.rows[r].cells[5].children[0].value);
+
+            }
+
+            if (document.getElementById('discount').value == '') {
+                billDis = 0;
+            } else {
+                billDis = document.getElementById('discount').value;
+            }
+            if (document.getElementById('paid').value == '') {
+                billPaid = 0;
+            } else {
+                billPaid = document.getElementById('paid').value;
+            }
+
+            bill = {
+                'Cid': CustomerId,
+                'Amount': document.getElementById('totalAmount').value,
+                'Discount': billDis,
+                'Paid': billPaid,
+                'Balance': document.getElementById('balance').value,
+                'Detail': data,
+                'SaleType': document.getElementById('saleTypeD').value,
+                'Comment': ''
+            }
+            ipcRenderer.send('SaveAndPrintbill', bill);
+        } else {
+            window.alert('Before Print make Bill first');
+        }
+    });
+
+    ipcRenderer.on('BillSaveSubmit', function (e, data) {
+
+        if (data) {
+            document.querySelector('#saleTypeD').focus();
+            window.alert(data);
+            ClearSaleBill();
+        }
+    });
+
+    document.querySelector('#cancelBill').addEventListener('click', function (e) {
+        document.querySelector('#saleTypeD').focus();
+        ClearSaleBill();
+    });
+
+    function ClearSaleBill() {
+        document.querySelector('#billTable').innerHTML = '';
+        document.querySelector('#totalAmount').value = 0;
+        document.getElementById('discount').value = 0;
+        document.getElementById('paid').value = 0;
+        document.getElementById('balance').value = 0;
+        document.getElementById('saleTypeD').value = 'Cash Sale';
+        CustomerId = 0;
+        ipcRenderer.send('getBillId', '');
+    }
+
+
+    //======================== Bill Window Functions ==========================
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    if (dd < 10) {
+        dd = '0' + dd
+    }
+
+    if (mm < 10) {
+        mm = '0' + mm
+    }
+
+    today = yyyy + '-' + mm + '-' + dd;
+
+    document.getElementById('fromDate').value = today;
+    document.getElementById('toDate').value = today;
+
+    document.getElementById('findBillbtn').addEventListener('click', function (e, data) {
+        e.preventDefault();
+        fromD = document.getElementById('fromDate').value;
+        toD = document.getElementById('toDate').value;
+        cusType = document.getElementById('saleTypeBE').value;
+
+        ipcRenderer.send('main:getAllBillId', {fromD, toD, cusType});
+        //console.log(fromD , toD , cusType);
+    });
+
+    ipcRenderer.on('main:sendBilldetail', function (e, data) {
+        if (data) {
+            //console.log(data); selectItemBE
+            document.getElementById("selectItemBE").innerHTML = '';
+            for (item in data) {
+                var option = document.createElement("option");
+                option.text = data[item]['billid'];
+                option.value = data[item]['billid'];
+                var select = document.getElementById("selectItemBE");
+                select.appendChild(option);
+            }
+        }
+    });
+
+    document.querySelector('#selectItemBE').addEventListener('keyup', function (e) {
+        // // // // // console.log('key up listen', e.keyCode);
+        if (e.keyCode == 13) {
+            var billid = document.getElementById('selectItemBE').value;
+            billId = billid;
+            ipcRenderer.send('main:getAllBillDetail', billid);
+        }
+
+    });
+
+    ipcRenderer.on('billWindow:billDetails', function (e, data) {
+        if (data) {
+            console.log(data);
+            table = document.getElementById('billEditTable');
+            table.innerHTML = '';
+
+            for (item in data) {
+                i = data[item];
+
+                row = `<td style="display: none;">${i['itemId']}</td>
                           <td>${i['description']}</td>
                           <td>${i['Code']}</td>
                           <td>${i['Stock']}</td>
@@ -992,83 +1009,83 @@
                           <td>
                           <button onclick="delItemBE(${i['itemId']})" class="btn btn-danger" disabled>X</button>
                           </td>`;
-                    tr = document.createElement('tr');
-                    tr.innerHTML = row
-                    table.appendChild(tr);
-                }
-
-                document.getElementById('balanceBE').value = data[0]['pending'];
-                document.getElementById('totalAmountBE').value = data[0]['amount'];
-                document.getElementById('discountBE').value = data[0]['discount'];
-                document.getElementById('paidBE').value = data[0]['paid'];
-            }
-        });
-
-        document.getElementById('discountBE').addEventListener('keyup', function (e) {
-            e.preventDefault();
-            dis = document.getElementById('discountBE').value;
-            totalAmt = document.getElementById('totalAmountBE').value;
-            if (Number(dis) > Number(totalAmt)) {
-                document.getElementById('discountBE').value = 0;
-                window.alert('your discount is exceed than total bill');
+                tr = document.createElement('tr');
+                tr.innerHTML = row
+                table.appendChild(tr);
             }
 
-            document.getElementById('paidBE').value = Number(totalAmt) - Number(dis);
-        });
+            document.getElementById('balanceBE').value = data[0]['pending'];
+            document.getElementById('totalAmountBE').value = data[0]['amount'];
+            document.getElementById('discountBE').value = data[0]['discount'];
+            document.getElementById('paidBE').value = data[0]['paid'];
+        }
+    });
 
-        document.getElementById('EditBillbtn').addEventListener('click', function (e) {
-            e.preventDefault();
-            window.alert('comming soon');
-        });
-
-        document.getElementById('printAndSaveBtnBE').addEventListener('click', function (e) {
-            e.preventDefault();
-            dis = document.getElementById('discountBE').value;
-            paid = document.getElementById('paidBE').value;
-            totalAmt = document.getElementById('totalAmountBE').value;
-            cusName = document.getElementById('saleTypeBE').value;
-
-            if (paid == '') {
-                paid = 0;
-            }
-            if (dis == '') {
-                dis = 0;
-            }
-
-            ipcRenderer.send('mainjs:updateBill', { billId, totalAmt, dis, paid, cusName });
-
-
-        });
-
-        document.getElementById('cancelBillBE').addEventListener('click', function (e) {
-            e.preventDefault();
-            document.getElementById('billEditTable').innerHTML = '';
-            document.getElementById('saleTypeBE').value = 'Cash Sale';
-            document.getElementById('selectItemBE').innerHTML = '';
-            document.getElementById('fromDate').value = today;
-            document.getElementById('toDate').value = today;
-            document.getElementById('balanceBE').value = 0;
-            document.getElementById('totalAmountBE').value = 0;
+    document.getElementById('discountBE').addEventListener('keyup', function (e) {
+        e.preventDefault();
+        dis = document.getElementById('discountBE').value;
+        totalAmt = document.getElementById('totalAmountBE').value;
+        if (Number(dis) > Number(totalAmt)) {
             document.getElementById('discountBE').value = 0;
-            document.getElementById('paidBE').value = 0;
-        })
+            window.alert('your discount is exceed than total bill');
+        }
 
-        // ===================== Reports ======================================
-        ipcRenderer.on('main:totalItems', function (e, data) {
-            console.log('==================== main items =========', data['totalItems']);
-            document.getElementById('totalItems').innerHTML = String(data['totalItems']);
-        })
-        ipcRenderer.on('main:cashSale', function (e, data) {
-            console.log('==================== main cash =========', data);
-            document.getElementById('totalCashSale').innerHTML = String(data['cashSale']);
-        })
-        ipcRenderer.on('main:customerSale', function (e, data) {
-            console.log('==================== main customer =========', data);
-            document.getElementById('totalCusSale').innerHTML = String(data['customerSale']);
-        })
+        document.getElementById('paidBE').value = Number(totalAmt) - Number(dis);
+    });
 
-    </script>
-    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js" />
-    <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/>
+    document.getElementById('EditBillbtn').addEventListener('click', function (e) {
+        e.preventDefault();
+        window.alert('comming soon');
+    });
+
+    document.getElementById('printAndSaveBtnBE').addEventListener('click', function (e) {
+        e.preventDefault();
+        dis = document.getElementById('discountBE').value;
+        paid = document.getElementById('paidBE').value;
+        totalAmt = document.getElementById('totalAmountBE').value;
+        cusName = document.getElementById('saleTypeBE').value;
+
+        if (paid == '') {
+            paid = 0;
+        }
+        if (dis == '') {
+            dis = 0;
+        }
+
+        ipcRenderer.send('mainjs:updateBill', {billId, totalAmt, dis, paid, cusName});
+
+
+    });
+
+    document.getElementById('cancelBillBE').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('billEditTable').innerHTML = '';
+        document.getElementById('saleTypeBE').value = 'Cash Sale';
+        document.getElementById('selectItemBE').innerHTML = '';
+        document.getElementById('fromDate').value = today;
+        document.getElementById('toDate').value = today;
+        document.getElementById('balanceBE').value = 0;
+        document.getElementById('totalAmountBE').value = 0;
+        document.getElementById('discountBE').value = 0;
+        document.getElementById('paidBE').value = 0;
+    })
+
+    // ===================== Reports ======================================
+    ipcRenderer.on('main:totalItems', function (e, data) {
+        console.log('==================== main items =========', data['totalItems']);
+        document.getElementById('totalItems').innerHTML = String(data['totalItems']);
+    })
+    ipcRenderer.on('main:cashSale', function (e, data) {
+        console.log('==================== main cash =========', data);
+        document.getElementById('totalCashSale').innerHTML = String(data['cashSale']);
+    })
+    ipcRenderer.on('main:customerSale', function (e, data) {
+        console.log('==================== main customer =========', data);
+        document.getElementById('totalCusSale').innerHTML = String(data['customerSale']);
+    })
+
+</script>
+<script src="node_modules/bootstrap/dist/js/bootstrap.min.js"/>
+<script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"/>
 </body>
 </html>

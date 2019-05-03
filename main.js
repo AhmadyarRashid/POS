@@ -9,7 +9,7 @@ var fs = require('fs');
 process.env.NODE_ENV = 'production';
 let cid;
 
-const { app, BrowserWindow, Menu, ipcMain } = electron;
+const {app, BrowserWindow, Menu, ipcMain} = electron;
 
 let loginWindow;
 let mainWindow;
@@ -22,11 +22,10 @@ let addCusWindow;
 let notificationWindow;
 
 
-// Add the credentials to access your database
 var connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: null, // or the original password : 'apaswword'
+    password: null,
     database: 'atoshop'
 });
 
@@ -35,7 +34,6 @@ var connection = mysql.createConnection({
 app.on('ready', function () {
 
     connection.connect(function (err) {
-        // in case of error
         if (err) {
             console.log(err.code);
             console.log(err.fatal);
@@ -62,16 +60,9 @@ app.on('ready', function () {
 
     loginWindow.center();
     loginWindow.setMaximizable(false);
-
-    // // Build menu from template
-    // const loginMenu = Menu.buildFromTemplate(loginMenuTemplate);
-    // // Insert menu
-    // Menu.setApplicationMenu(loginMenu);
 });
 
 function openMainWindow(cid) {
-
-
     if (cid !== undefined || cid > 0) {
 
         // Create new window
@@ -462,6 +453,7 @@ ipcMain.on('main:getBillDetail', function (e, data) {
     })
 });
 
+
 // save next btn in add item
 ipcMain.on('SaveNextaddInventoryItem', function (e, res) {
     sn = '';
@@ -641,7 +633,6 @@ async function getCustomerSale() {
 }
 
 
-
 function refresAllItems() {
     $getAllItems = `SELECT * from items where cid = ${cid} ORDER BY id DESC`;
     connection.query($getAllItems, function (err1, rows1, fields1) {
@@ -711,8 +702,7 @@ ipcMain.on('main:searchItem', function (e, data) {
 
             mainWindow.webContents.send('mainHtml:sendAllData', rows);
         })
-    }
-    else {
+    } else {
         $searchItem = `SELECT * FROM items WHERE  CodeP LIKE '%${data}%' OR description LIKE '%${data}%' OR Model LIKE '%${data}%' ORDER BY id DESC`;
         connection.query($searchItem, function (err, rows, field) {
             if (err) {
@@ -918,6 +908,19 @@ ipcMain.on('getCustomerBalance', function (e, data) {
         }
         console.log('Result :', rows);
         mainWindow.webContents.send('SendCusIDPend', rows);
+    })
+});
+
+// sale item serach
+ipcMain.on('sale:saleItemSearch', function (e, data) {
+    //console.log('sale Item = ', data);
+    $GetItemsquery = `SELECT id, description, Model,items FROM items where description LIKE '%${data}%' or Model LIKE '%${data}%'`;
+    connection.query($GetItemsquery, function (e, rows, field) {
+        if (e) {
+            console.log(e);
+            return;
+        }
+        mainWindow.webContents.send('Sale:sendItems', rows);
     })
 });
 
